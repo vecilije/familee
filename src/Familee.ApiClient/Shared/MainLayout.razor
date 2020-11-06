@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+
+<MudLayout DrawerOpen="@DocsDrawerOpen">
+    <MudAppBar Position="Position.Absolute" Elevation="0">
+        <MudIconButton Icon="@Icons.Material.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DocsDrawerToggle())"/>
+        <MudAppBarSpacer/>
+    </MudAppBar>
+    <MudDrawer>
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Familee</MudText>
+        </MudDrawerHeader>
+        <MudNavMenu>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code{
+    bool DocsDrawerOpen = false;
+
+    void DocsDrawerToggle()
+    {
+        DocsDrawerOpen = !DocsDrawerOpen;
+    }
+}
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>

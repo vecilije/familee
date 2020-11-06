@@ -584,3 +584,9 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,jetbrains,jetbrains+iml,jetbrains+all
+
+*.db
+*.db-*
+
+appsettings.json
+appsettings.*.json

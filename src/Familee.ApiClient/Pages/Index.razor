@@ -1,0 +1,80 @@
+﻿@page "/"
+@using Familee.Domain.Entities
+@using Familee.ApiClient.Gateways
+
+<MudTable Items="familyMembers" Hover="true">
+    
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Add" 
+                   OnClick="OnNewClick">Novi</MudButton>
+        <MudToolBarSpacer />
+        <MudIcon Class="mt-5 mr-2" Icon="@Icons.Material.Search"></MudIcon>
+        <MudTextField Placeholder="Pretraga..." @bind-Value="searchText"></MudTextField>
+    </ToolBarContent>
+    
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh>Ime</MudTh>
+        <MudTh>Prezime</MudTh>
+        <MudTh>Rođen(a)</MudTh>
+        <MudTh>Umro(la)</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    
+    <RowTemplate>
+        <MudTd>
+            <MudAvatar Size="Size.Small" Image="@(GetImage(context))" />
+        </MudTd>
+        <MudTd>@context.FirstName</MudTd>
+        <MudTd>@context.LastName</MudTd>
+        <MudTd>@context.BirthYear</MudTd>
+        <MudTd>@context.DeathYear</MudTd>
+        <MudTd></MudTd>
+    </RowTemplate>
+    
+</MudTable>
+
+@code {
+
+    private string searchText = "";
+    private IEnumerable<FamilyMemberDto> familyMembers = new List<FamilyMemberDto>();
+    
+    [Inject]
+    private IFamilyMemberApiGateway FamilyMemberApiGateway { get; set; }
+    
+    [Inject]
+    private ISnackbar Snackbar { get; set; }
+    
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    private string GetImage(FamilyMemberDto familyMember)
+    {
+        return string.IsNullOrEmpty(familyMember.ImagePath)
+            ? (familyMember.Gender == Gender.Male ? "/images/male_avatar.png" : "/images/female_avatar.png")
+            : familyMember.ImagePath;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            familyMembers = await FamilyMemberApiGateway.SearchAsync(searchText);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Error($"Error: {e.Message}");
+        }
+    }
+
+    private async Task OnNewClick()
+    {
+        var dialogReference = DialogService.Show<EditFamilyMemberDialog>("Novi Član");
+        
+        var dialogResult = await dialogReference.Result;
+        
+        if (!dialogResult.Cancelled)
+            familyMembers = await FamilyMemberApiGateway.SearchAsync(searchText);
+    }
+
+}
