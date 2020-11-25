@@ -1,4 +1,4 @@
 # familee
 Create and organize your family tree.
 
-The project is in development...
+The project is still under development!
