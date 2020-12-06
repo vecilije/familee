@@ -1,0 +1,67 @@
+@if (FamilyMember != null)
+{
+  <MatCard Class="family-member-card">
+    <MatCardContent>
+      <MatCardMedia Square="true" ImageUrl="@ResolveImageUrl()"></MatCardMedia>
+      <div class="family-member-card-content">
+        <MatHeadline6 class="clean-margin">
+          @FamilyMember.FirstName @FamilyMember.LastName
+        </MatHeadline6>
+        <MatSubtitle2 class="clean-margin">
+          @(FamilyMember.Gender == Gender.Male ? new MarkupString("&#9794;") : new MarkupString("&#9792;"))
+          @PrintYears()
+        </MatSubtitle2>
+      </div>
+    </MatCardContent>
+
+    <MatCardActions>
+      <MatCardActionButtons>
+        <MatButton>Info</MatButton>
+      </MatCardActionButtons>
+
+      <MatCardActionIcons>
+        <MatIconButton Icon="@MatIconNames.Edit"></MatIconButton>
+        <MatIconButton Icon="@MatIconNames.Remove_circle"></MatIconButton>
+      </MatCardActionIcons>
+    </MatCardActions>
+  </MatCard>}
+
+
+@code {
+
+  [Parameter]
+  public FamilyMember FamilyMember { get; set; }
+
+  private string ResolveImageUrl()
+  {
+    int yearsOld = FamilyMember.BirthYear > 0 ? DateTime.Now.Year - FamilyMember.BirthYear.Value : 0;
+
+    if (yearsOld <= 0)
+    {
+      return "/images/person.png";
+    }
+
+    if (yearsOld < 18)
+    {
+      return FamilyMember.Gender == Gender.Male ? "/images/boy.png" : "/images/girl.png";
+    }
+
+    if (yearsOld <= 40)
+    {
+      return FamilyMember.Gender == Gender.Male ? "/images/businessman.png" : "/images/businesswoman.png";
+    }
+
+    if (yearsOld <= 65)
+    {
+      return FamilyMember.Gender == Gender.Male ? "/images/male.png" : "/images/female.png";
+    }
+
+    return FamilyMember.Gender == Gender.Male ? "/images/grandfather.png" : "/images/grandmother.png";
+  }
+
+  private string PrintYears()
+    => $"({(FamilyMember.BirthYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")}" +
+       $"-" +
+       $"{(FamilyMember.DeathYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")})";
+
+}
