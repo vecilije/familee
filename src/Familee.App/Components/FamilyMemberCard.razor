@@ -16,21 +16,33 @@
 
     <MatCardActions>
       <MatCardActionButtons>
-        <MatButton>Info</MatButton>
+        <MatButton OnClick="@(() => Navigator.NavigateToFamilyMemberInfo(FamilyMember.Id))">Info</MatButton>
       </MatCardActionButtons>
 
       <MatCardActionIcons>
-        <MatIconButton Icon="@MatIconNames.Edit"></MatIconButton>
-        <MatIconButton Icon="@MatIconNames.Remove_circle"></MatIconButton>
+        <MatIconButton Icon="@MatIconNames.Edit" OnClick="@(() => Navigator.NavigateToFamilyMemberEdit(FamilyMember.Id))"></MatIconButton>
+        <MatIconButton Icon="@MatIconNames.Remove_circle" OnClick="RemoveClick"></MatIconButton>
       </MatCardActionIcons>
     </MatCardActions>
-  </MatCard>}
+  </MatCard>
+}
 
 
 @code {
 
+  private bool _isDialogOpen = false;
+
   [Parameter]
   public FamilyMember FamilyMember { get; set; }
+  
+  [Inject]
+  private INavigator Navigator { get; set; }
+  
+  [Inject]
+  private IMatDialogService DialogService { get; set; }
+  
+  [Inject]
+  private IMatToaster Toaster { get; set; }
 
   private string ResolveImageUrl()
   {
@@ -63,5 +75,17 @@
     => $"({(FamilyMember.BirthYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")}" +
        $"-" +
        $"{(FamilyMember.DeathYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")})";
+
+  private async Task RemoveClick()
+  {
+    var shouldRemove = 
+      await DialogService.ConfirmAsync("You really want to remove selected family member?");
+
+    if (shouldRemove)
+    {
+      //ToDo: Remove Family Member
+      Toaster.Add("Family member successfully removed.", MatToastType.Success);
+    }
+  }
 
 }

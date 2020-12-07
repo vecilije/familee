@@ -1,0 +1,89 @@
+﻿@page "/FamilyMembers/{FamilyMemberId:guid?}"
+@using Familee.App.Infrastructure.Validation
+
+<MatPaper Elevation="2" Rounded="true" Class="margin-1 padding-1">
+    <EditForm Model="_familyMember" OnValidSubmit="OnFormValidSubmit" OnInvalidSubmit="OnFormInvalidSubmit">
+        <FluentValidator Validator="new FamilyMemberValidator()"/>
+        <p>
+            <MatTextField @bind-Value="_familyMember.FirstName" Disabled="_isDataLoading" Label="First Name"
+                           FullWidth="true"/>
+            <ValidationMessage For="@(() => _familyMember.FirstName)"/>
+        </p>
+        
+        <p>
+            <MatTextField @bind-Value="_familyMember.LastName" Disabled="@_isDataLoading" Label="Last Name" FullWidth="true"/>
+            <ValidationMessage For="@(() => _familyMember.LastName)"/>
+        </p>
+        
+        <p>
+            <MatTextField @bind-Value="_familyMember.NickName" Disabled="@_isDataLoading" Label="Nickname" FullWidth="true"/>
+            <ValidationMessage For="@(() => _familyMember.NickName)"/>
+        </p>
+        
+        <p>
+            <MatSelectItem @bind-Value="_familyMember.Gender" Label="Gender" Disabled="_isDataLoading" FullWidth="true"
+                            Items="@(Enum.GetValues<Gender>())">
+            </MatSelectItem>
+        </p>
+        
+        <p>
+            <MatNumericUpDownField @bind-Value="_familyMember.BirthYear" Disabled="@_isDataLoading" Label="Birth Year" FullWidth="true"/>
+            <ValidationMessage For="@(() => _familyMember.BirthYear)"/>
+        </p>
+        
+        <p>
+            <MatNumericUpDownField @bind-Value="_familyMember.DeathYear" Disabled="@_isDataLoading" Label="Death Year" FullWidth="true"/>
+            <ValidationMessage For="@(() => _familyMember.DeathYear)"/>
+        </p>
+        
+        <p>
+            <MatTextField @bind-Value="_familyMember.Biography" Disabled="@_isDataLoading" Label="Biography" FullWidth="true" TextArea="true"></MatTextField>
+            <ValidationMessage For="@(() => _familyMember.Biography)"/>
+        </p>
+
+        <p>
+            <MatButton Icon="@MatIconNames.Save" type="submit">Save</MatButton>
+        </p>
+    </EditForm>
+</MatPaper>
+
+
+@code {
+    private FamilyMember _familyMember = new();
+    private bool _isDataLoading = false;
+
+    [Parameter]
+    public Guid? FamilyMemberId { get; set; }
+
+    [Inject]
+    public IMatToaster Toaster { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(2000);
+
+        if (FamilyMemberId.GetValueOrDefault() == Guid.Empty)
+            return;
+
+        _familyMember = new FamilyMember
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Vedran",
+            LastName = "Stanić",
+            BirthYear = 1990,
+            NickName = "Vecilije",
+            Biography = "Bio..."
+        };
+    }
+
+    private void OnFormValidSubmit()
+    {
+        Toaster.Add("Data saved successfully!", MatToastType.Success);
+    }
+
+    private void OnFormInvalidSubmit()
+    {
+        Toaster.Add("Please review the data.", MatToastType.Warning);
+    }
+
+}

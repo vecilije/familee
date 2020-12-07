@@ -15,3 +15,11 @@ body {
 .clean-margin {
     margin: 0;
 }
+
+.padding-1 {
+    padding: 1rem;
+}
+
+.margin-1 {
+    margin: 1rem;
+}
