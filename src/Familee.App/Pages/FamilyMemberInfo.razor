@@ -1,0 +1,55 @@
+﻿@page "/FamilyMembers/{FamilyMemberId:guid}/Info"
+@using Familee.App.Infrastructure.Helpers
+
+@if (FamilyMember != null)
+{
+    <MatPaper Elevation="2" Class="margin-1 padding-1" Rounded="true">
+
+        <div class="mat-layout-grid">
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell">
+                    <img alt="@FamilyMember.FirstName @FamilyMember.LastName"
+                         src="@ImageResolver.ResolveImageUrl(FamilyMember)" style="max-width: 100%; height: auto;"/>
+                </div>
+                <div class="mat-layout-grid-cell">
+                    <MatH3>@FamilyMember.FirstName @FamilyMember.LastName</MatH3>
+                </div>
+            </div>
+        </div>
+
+        <MatAccordion>
+
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>Parents</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+
+        </MatAccordion>
+
+
+    </MatPaper>
+}
+
+@code {
+
+    private FamilyMember FamilyMember { get; set; } = new()
+    {
+        FirstName = "Vedran",
+        LastName = "Stanić",
+        Id = Guid.NewGuid(),
+        Biography = "This is Vedran's Biography...",
+        BirthYear = 1990,
+        NickName = "Veco"
+    };
+
+    [Parameter]
+    public Guid FamilyMemberId { get; set; }
+
+    [Inject]
+    private IFamilyMemberImageResolver ImageResolver { get; set; }
+
+}

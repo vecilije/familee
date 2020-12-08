@@ -8,5 +8,7 @@ namespace Familee.App.Infrastructure.Route
         void NavigateToFamilyMemberEdit(Guid? familyMemberId);
         string GetFamilyMemberInfoRoute(Guid familyMemberId);
         void NavigateToFamilyMemberInfo(Guid familyMemberId);
+        string GetFamilyMembersRoute();
+        void NavigateToFamilyMembers();
     }
 }

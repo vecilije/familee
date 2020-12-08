@@ -27,5 +27,12 @@ namespace Familee.App.Infrastructure.Route
     {
       _navigationManager.NavigateTo(GetFamilyMemberInfoRoute(familyMemberId));
     }
+
+    public string GetFamilyMembersRoute() => "/";
+
+    public void NavigateToFamilyMembers()
+    {
+      _navigationManager.NavigateTo(GetFamilyMembersRoute());
+    }
   }
 }

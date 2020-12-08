@@ -4,8 +4,12 @@
     <MatAppBar Fixed="true">
         <MatAppBarRow>
             <MatAppBarSection>
-                <MatIconButton Icon="supervised_user_circle"></MatIconButton>
+                <MatIconButton Icon="supervised_user_circle" OnClick="@(() => Navigator.NavigateToFamilyMembers())"></MatIconButton>
                 <MatAppBarTitle>Familee</MatAppBarTitle>
+            </MatAppBarSection>
+            <MatAppBarSection Align="MatAppBarSectionAlign.End">
+                <MatIconButton Icon="@MatIconNames.Add_circle" 
+                               OnClick="@(() => Navigator.NavigateToFamilyMemberEdit(null))"></MatIconButton>
             </MatAppBarSection>
         </MatAppBarRow>
     </MatAppBar>
@@ -17,3 +21,10 @@
 
 <MatPortalHost></MatPortalHost>
 <MatToastContainer />
+
+@code {
+
+    [Inject]
+    private INavigator Navigator { get; set; }
+
+}

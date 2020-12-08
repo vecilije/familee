@@ -42,7 +42,8 @@
         </p>
 
         <p>
-            <MatButton Icon="@MatIconNames.Save" type="submit">Save</MatButton>
+            <MatButton Outlined="true" Icon="@MatIconNames.Save" Type="submit">Save</MatButton>
+            <MatButton Outlined="true" Icon="@MatIconNames.Cancel" OnClick="@(() => Navigator.NavigateToFamilyMembers())">Cancel</MatButton>
         </p>
     </EditForm>
 </MatPaper>
@@ -56,7 +57,10 @@
     public Guid? FamilyMemberId { get; set; }
 
     [Inject]
-    public IMatToaster Toaster { get; set; }
+    private IMatToaster Toaster { get; set; }
+    
+    [Inject]
+    private INavigator Navigator { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

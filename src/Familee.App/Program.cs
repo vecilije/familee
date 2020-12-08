@@ -1,15 +1,9 @@
-using System;
-using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
-using Familee.App.Infrastructure;
+using Familee.App.Infrastructure.Helpers;
 using Familee.App.Infrastructure.Route;
 using MatBlazor;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Familee.App
 {
@@ -28,6 +22,7 @@ namespace Familee.App
     private static void ConfigureServices(IServiceCollection services)
     {
       services.AddSingleton<INavigator, Navigator>();
+      services.AddSingleton<IFamilyMemberImageResolver, FamilyMemberImageResolver>();
       
       services.AddMatBlazor();
       services.AddMatToaster(c =>

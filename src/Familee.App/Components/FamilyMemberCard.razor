@@ -1,8 +1,9 @@
+@using Familee.App.Infrastructure.Helpers
 @if (FamilyMember != null)
 {
   <MatCard Class="family-member-card">
     <MatCardContent>
-      <MatCardMedia Square="true" ImageUrl="@ResolveImageUrl()"></MatCardMedia>
+      <MatCardMedia Square="true" ImageUrl="@ImageResolver.ResolveImageUrl(FamilyMember)"></MatCardMedia>
       <div class="family-member-card-content">
         <MatHeadline6 class="clean-margin">
           @FamilyMember.FirstName @FamilyMember.LastName
@@ -43,33 +44,9 @@
   
   [Inject]
   private IMatToaster Toaster { get; set; }
-
-  private string ResolveImageUrl()
-  {
-    int yearsOld = FamilyMember.BirthYear > 0 ? DateTime.Now.Year - FamilyMember.BirthYear.Value : 0;
-
-    if (yearsOld <= 0)
-    {
-      return "/images/person.png";
-    }
-
-    if (yearsOld < 18)
-    {
-      return FamilyMember.Gender == Gender.Male ? "/images/boy.png" : "/images/girl.png";
-    }
-
-    if (yearsOld <= 40)
-    {
-      return FamilyMember.Gender == Gender.Male ? "/images/businessman.png" : "/images/businesswoman.png";
-    }
-
-    if (yearsOld <= 65)
-    {
-      return FamilyMember.Gender == Gender.Male ? "/images/male.png" : "/images/female.png";
-    }
-
-    return FamilyMember.Gender == Gender.Male ? "/images/grandfather.png" : "/images/grandmother.png";
-  }
+  
+  [Inject]
+  private IFamilyMemberImageResolver ImageResolver { get; set; }
 
   private string PrintYears()
     => $"({(FamilyMember.BirthYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")}" +
