@@ -8,11 +8,13 @@
         <div class="mat-layout-grid">
             <div class="mat-layout-grid-inner">
                 <div class="mat-layout-grid-cell">
-                    <img alt="@FamilyMember.FirstName @FamilyMember.LastName"
+                    <img alt="@FamilyMember.PrintFullName()"
                          src="@ImageResolver.ResolveImageUrl(FamilyMember)" style="max-width: 100%; height: auto;"/>
                 </div>
                 <div class="mat-layout-grid-cell">
-                    <MatH3>@FamilyMember.FirstName @FamilyMember.LastName</MatH3>
+                    <MatH3>@FamilyMember.PrintFullName()</MatH3>
+                    <MatH5>@FamilyMember.PrintGenderSymbol() @FamilyMember.PrintYears()</MatH5>
+                    <MatBody1>@FamilyMember.Biography</MatBody1>
                 </div>
             </div>
         </div>
@@ -24,12 +26,37 @@
                     <MatExpansionPanelHeader>Parents</MatExpansionPanelHeader>
                 </MatExpansionPanelSummary>
                 <MatExpansionPanelDetails>
-
+                    <FamilyMembersList FamilyMembers="@Parents"></FamilyMembersList>
                 </MatExpansionPanelDetails>
             </MatExpansionPanel>
 
         </MatAccordion>
 
+        <MatAccordion>
+
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>Grandparents</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <FamilyMembersList FamilyMembers="@Grandparents"></FamilyMembersList>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+
+        </MatAccordion>
+
+        <MatAccordion>
+
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader>Brothers and Sisters</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <FamilyMembersList FamilyMembers="@BrothersAndSisters"></FamilyMembersList>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+
+        </MatAccordion>
 
     </MatPaper>
 }
@@ -46,10 +73,37 @@
         NickName = "Veco"
     };
 
+    private IEnumerable<FamilyMember> Parents { get; set; } = new List<FamilyMember>();
+    private IEnumerable<FamilyMember> Grandparents { get; set; }
+    private IEnumerable<FamilyMember> BrothersAndSisters { get; set; }
+
     [Parameter]
     public Guid FamilyMemberId { get; set; }
 
     [Inject]
     private IFamilyMemberImageResolver ImageResolver { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Parents = new List<FamilyMember>
+        {
+            new FamilyMember() {FirstName = "Momčilo", LastName = "Stanić", BirthYear = 1958},
+            new FamilyMember() {FirstName = "Dušanka", LastName = "Stanić", BirthYear = 1965, Gender = Gender.Female}
+        };
+
+        Grandparents = new List<FamilyMember>
+        {
+            new FamilyMember() {FirstName = "Petko", LastName = "Stanić", BirthYear = 1940, DeathYear = 1990},
+            new FamilyMember() {FirstName = "Draginja", LastName = "Stanić", BirthYear = 1941, DeathYear = 1985, Gender = Gender.Female},
+            new FamilyMember() {FirstName = "Stanoje", LastName = "Malinić", BirthYear = 1940, DeathYear = 2004},
+            new FamilyMember() {FirstName = "Dragica", LastName = "Malinić", BirthYear = 1943, Gender = Gender.Female}
+        };
+
+        BrothersAndSisters = new List<FamilyMember>
+        {
+            new FamilyMember() {FirstName = "Majan", LastName = "Stanić", BirthYear = 1985, Gender = Gender.Female},
+            new FamilyMember() {FirstName = "Dajan", LastName = "Stanić", BirthYear = 1967, Gender = Gender.Female}
+        };
+    }
 
 }

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
+using Familee.App.Infrastructure.Gateways;
 using Familee.App.Infrastructure.Helpers;
 using Familee.App.Infrastructure.Route;
 using MatBlazor;
@@ -23,16 +25,20 @@ namespace Familee.App
     {
       services.AddSingleton<INavigator, Navigator>();
       services.AddSingleton<IFamilyMemberImageResolver, FamilyMemberImageResolver>();
+
+      services.AddTransient<IFamilyMemberGateway, FamilyMemberLocalStorageGateway>();
       
       services.AddMatBlazor();
       services.AddMatToaster(c =>
       {
-        c.Position = MatToastPosition.BottomFullWidth;
+        c.Position = MatToastPosition.BottomRight;
         c.PreventDuplicates = true;
         c.NewestOnTop = true;
         c.ShowCloseButton = true;
         c.VisibleStateDuration = 3000;
       });
+
+      services.AddBlazoredLocalStorage();
     }
   }
 }

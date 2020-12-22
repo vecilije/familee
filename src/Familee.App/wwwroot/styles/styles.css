@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    font-family: Roboto, sans-serif;
 }
 
 .family-member-card {
@@ -23,3 +24,18 @@ body {
 .margin-1 {
     margin: 1rem;
 }
+
+.family-member-list-item .mat-layout-grid {
+    padding: 0.2rem 0.5rem;
+}
+
+.family-member-list-item .mat-layout-grid-cell {
+    display: flex; 
+    align-items: center;
+}
+
+.family-member-list-item .mat-layout-grid-cell img {
+    max-width: 56px; 
+    height: auto;
+}
+

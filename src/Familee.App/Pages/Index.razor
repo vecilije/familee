@@ -7,61 +7,14 @@
 
 @code {
 
-  private IEnumerable<FamilyMember> _familyMembers = new List<FamilyMember>
+  private IEnumerable<FamilyMember> _familyMembers = new List<FamilyMember>();
+
+  [Inject]
+  private IFamilyMemberGateway FamilyMemberGateway { get; set; }
+  
+  protected override async Task OnInitializedAsync()
   {
-    new FamilyMember
-    {
-      FirstName = "Petko",
-      LastName = "Stanić",
-      BirthYear = 1930,
-      DeathYear = 1990,
-      NickName = "Moćo"
-    },
-    new FamilyMember
-    {
-      FirstName = "Momčilo",
-      LastName = "Stanić",
-      BirthYear = 1958,
-      NickName = "Moćo"
-    },
-    new FamilyMember
-    {
-      FirstName = "Dušanka",
-      LastName = "Stanić",
-      BirthYear = 1965,
-      Gender = Gender.Female,
-      NickName = "Duja"
-    },
-    new FamilyMember
-    {
-      FirstName = "Vedran",
-      LastName = "Stanic",
-      BirthYear = 1990,
-      NickName = "Veco"
-    },
-    new FamilyMember
-    {
-      FirstName = "Anđelka",
-      LastName = "Stanić",
-      BirthYear = 1990,
-      Gender = Gender.Female,
-      NickName = "Anđa"
-    },
-    new FamilyMember
-    {
-      FirstName = "Andrej",
-      LastName = "Kasalović",
-      BirthYear = 2012,
-      Gender = Gender.Male,
-      NickName = "Anđa"
-    },
-    new FamilyMember
-    {
-      FirstName = "Unknown",
-      LastName = "User",
-      Gender = Gender.Male,
-      NickName = "No"
-    }
-  };
+    _familyMembers = await FamilyMemberGateway.GetAsync(string.Empty);
+  }
 
 }

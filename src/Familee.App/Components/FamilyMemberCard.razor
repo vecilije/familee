@@ -6,11 +6,11 @@
       <MatCardMedia Square="true" ImageUrl="@ImageResolver.ResolveImageUrl(FamilyMember)"></MatCardMedia>
       <div class="family-member-card-content">
         <MatHeadline6 class="clean-margin">
-          @FamilyMember.FirstName @FamilyMember.LastName
+          @FamilyMember.PrintFullName()
         </MatHeadline6>
         <MatSubtitle2 class="clean-margin">
-          @(FamilyMember.Gender == Gender.Male ? new MarkupString("&#9794;") : new MarkupString("&#9792;"))
-          @PrintYears()
+          @FamilyMember.PrintGenderSymbol()
+          @FamilyMember.PrintYears()
         </MatSubtitle2>
       </div>
     </MatCardContent>
@@ -47,11 +47,6 @@
   
   [Inject]
   private IFamilyMemberImageResolver ImageResolver { get; set; }
-
-  private string PrintYears()
-    => $"({(FamilyMember.BirthYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")}" +
-       $"-" +
-       $"{(FamilyMember.DeathYear.GetValueOrDefault() > 0 ? FamilyMember.BirthYear : "?")})";
 
   private async Task RemoveClick()
   {

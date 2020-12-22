@@ -1,0 +1,44 @@
+﻿@using Familee.App.Infrastructure.Helpers
+@if (FamilyMembers?.Count() > 0)
+{
+    foreach (var familyMember in FamilyMembers)
+    {
+        <MatPaper Outlined="true" Rounded="true" class="family-member-list-item">
+            
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    
+                    <div class="mat-layout-grid-cell">
+                        <img alt="@familyMember.PrintFullName()"
+                             src="@ImageResolver.ResolveImageUrl(familyMember)"/>
+                    </div>
+                    
+                    <div class="mat-layout-grid-cell">
+                        @familyMember.PrintFullName() @familyMember.PrintYears()
+                    </div>
+                    
+                    <div class="mat-layout-grid-cell" style="justify-content: end">
+                        <MatButton Icon="@MatIconNames.Info"
+                                   OnClick="@(() => Navigator.NavigateToFamilyMemberInfo(familyMember.Id))"
+                                   Unelevated="true">INFO</MatButton>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </MatPaper>        
+    }
+}
+
+@code {
+
+    [Parameter]
+    public IEnumerable<FamilyMember> FamilyMembers { get; set; }
+    
+    [Inject]
+    private IFamilyMemberImageResolver ImageResolver { get; set; }
+    
+    [Inject]
+    private INavigator Navigator { get; set; }
+
+}

@@ -42,8 +42,10 @@
         </p>
 
         <p>
-            <MatButton Outlined="true" Icon="@MatIconNames.Save" Type="submit">Save</MatButton>
-            <MatButton Outlined="true" Icon="@MatIconNames.Cancel" OnClick="@(() => Navigator.NavigateToFamilyMembers())">Cancel</MatButton>
+            <MatButton Outlined="true" Icon="@MatIconNames.Save" Type="submit" Disabled="_isDataLoading"
+                       Raised="true">Save</MatButton>
+            <MatButton Outlined="true" Icon="@MatIconNames.Cancel" 
+                       OnClick="@(() => Navigator.NavigateToFamilyMembers())" Disabled="_isDataLoading">Cancel</MatButton>
         </p>
     </EditForm>
 </MatPaper>
@@ -61,27 +63,38 @@
     
     [Inject]
     private INavigator Navigator { get; set; }
+    
+    [Inject]
+    private IFamilyMemberGateway FamilyMemberGateway { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(2000);
-
         if (FamilyMemberId.GetValueOrDefault() == Guid.Empty)
             return;
 
-        _familyMember = new FamilyMember
-        {
-            Id = Guid.NewGuid(),
-            FirstName = "Vedran",
-            LastName = "Stanić",
-            BirthYear = 1990,
-            NickName = "Vecilije",
-            Biography = "Bio..."
-        };
+        _isDataLoading = true;
+        
+        _familyMember = await FamilyMemberGateway.GetSingleAsync(FamilyMemberId);
+
+        _isDataLoading = false;
     }
 
-    private void OnFormValidSubmit()
+    private async Task OnFormValidSubmit()
     {
+        _isDataLoading = true;
+        
+        if (FamilyMemberId.GetValueOrDefault() == Guid.Empty)
+        {
+            _familyMember = await FamilyMemberGateway.AddAsync(_familyMember);
+            Navigator.NavigateToFamilyMemberEdit(_familyMember.Id);
+        }
+        else
+        {
+            _familyMember = await FamilyMemberGateway.UpdateAsync(_familyMember);
+        }
+
+        _isDataLoading = false;
+        
         Toaster.Add("Data saved successfully!", MatToastType.Success);
     }
 
